@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace libTask1
+namespace ConsoleAPI
 {
     public class Class1
     {
