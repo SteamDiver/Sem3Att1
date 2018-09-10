@@ -41,5 +41,13 @@ namespace Task1GUI
             }
             
         }
+
+        private void FileName_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                CreateBtn_Click(sender, e);
+            }
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace libTask1
     {
         private readonly List<byte> _contentBytes = new List<byte>();
         public string Name { get; set; }
-        public string DirPath { get; }
+        public string DirPath { get; set; }
 
         public File(string path)
         {

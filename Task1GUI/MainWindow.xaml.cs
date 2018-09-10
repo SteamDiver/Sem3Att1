@@ -70,11 +70,23 @@ namespace Task1GUI
                 try
                 {
                     file.Delete();
+                    Files.ItemsSource = null;
+                    Files.ItemsSource = ((Directory) Directories.SelectedValue).Files;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
+        }
+
+        private void RenameBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Files.SelectedValue is TextFile file)
+            {
+                file.Append(FileContent.Text);
+                RenameFile renameWindow = new RenameFile(file);
+                renameWindow.ShowDialog();
+            }
         }
     }
 }

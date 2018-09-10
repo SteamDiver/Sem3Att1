@@ -8,7 +8,7 @@
         Title="NewFile" Height="150.366" Width="296.22" ResizeMode="NoResize">
     <Grid>
         <Label Height="31" VerticalAlignment="Top" HorizontalAlignment="Left" Width="85" Margin="10,10,0,0">Full file path</Label>
-        <TextBox x:Name="FileName" Height="23" Margin="10,46,9.6,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="FileName" Height="23" Margin="10,46,9.6,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" VerticalContentAlignment="Center" KeyUp="FileName_KeyUp"/>
         <Button x:Name="CreateBtn" Content="Create" Margin="10,0,9.6,9.8" Height="28" VerticalAlignment="Bottom" Click="CreateBtn_Click"/>
     </Grid>
 </Window>

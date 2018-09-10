@@ -39,7 +39,7 @@
         <TextBox x:Name="FileContent" Grid.Column="2" Height="150" Margin="10.4,52,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <Label Content="Content" Grid.Column="2" HorizontalAlignment="Left" Margin="10.4,21,0,0" VerticalAlignment="Top"/>
         <Button x:Name="AppendBtn" Content="Append text" Grid.Column="3" Margin="10,44,9.6,0" VerticalAlignment="Top" Click="AppendBtn_Click"/>
-        <Button x:Name="RenameBtn" Content="Rename file" Grid.Column="3" Margin="10,68,9.6,0" VerticalAlignment="Top"/>
+        <Button x:Name="RenameBtn" Content="Rename file" Grid.Column="3" Margin="10,68,9.6,0" VerticalAlignment="Top" Click="RenameBtn_Click"/>
         <Button x:Name="DeleteFile" Content="Delete file" Grid.Column="3" Margin="11,92,8.6,0" VerticalAlignment="Top" Click="DeleteFile_Click"/>
 
 
