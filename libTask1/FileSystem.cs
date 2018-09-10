@@ -6,7 +6,7 @@ namespace libTask1
 {
     public class FileSystem
     {
-        public static List<Directory> Directories = new List<Directory>();
+        public static List<Directory> Directories { get; } = new List<Directory>();
 
         public static Directory FindDerectory(string path)
         {

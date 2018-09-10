@@ -6,18 +6,19 @@ namespace libTask1
 {
     public class File : IFile
     {
-        public List<byte> ContentBytes = new List<byte>();
+        private readonly List<byte> _contentBytes = new List<byte>();
         public string Name { get; set; }
+        public string DirPath { get; }
 
         public File(string path)
         {
             Name = Path.GetFileName(path);
-            var dirPath = Path.GetDirectoryName(path);
-            var dir = FileSystem.Directories.Find(x => x.Path == dirPath);
+            DirPath = Path.GetDirectoryName(path);
+            var dir = FileSystem.FindDerectory(DirPath);
 
             if (dir == null)
             {
-                dir = new Directory(dirPath);
+                dir = new Directory(DirPath);
                 FileSystem.AddDirectory(dir);
             }
             dir.AddFile(this);
@@ -30,17 +31,17 @@ namespace libTask1
 
         public byte[] GetBytes()
         {
-            return ContentBytes.ToArray();
+            return _contentBytes.ToArray();
         }
 
         public void AppendBytes(byte[] content)
         {
-            ContentBytes.AddRange(content);
+            _contentBytes.AddRange(content);
         }
 
         public void Delete()
         {
-            var dir = FileSystem.FindDerectory(Path.GetDirectoryName(Name));
+            var dir = FileSystem.FindDerectory(DirPath);
             if (dir != null)
                 dir.DeleteFile(this);
             else

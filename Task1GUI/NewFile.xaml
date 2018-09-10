@@ -1,0 +1,14 @@
+﻿<Window x:Class="Task1GUI.NewFile"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task1GUI"
+        mc:Ignorable="d"
+        Title="NewFile" Height="150.366" Width="296.22" ResizeMode="NoResize">
+    <Grid>
+        <Label Height="31" VerticalAlignment="Top" HorizontalAlignment="Left" Width="85" Margin="10,10,0,0">Full file path</Label>
+        <TextBox x:Name="FileName" Height="23" Margin="10,46,9.6,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+        <Button x:Name="CreateBtn" Content="Create" Margin="10,0,9.6,9.8" Height="28" VerticalAlignment="Bottom" Click="CreateBtn_Click"/>
+    </Grid>
+</Window>
