@@ -86,6 +86,8 @@ namespace Task1GUI
                 file.Append(FileContent.Text);
                 RenameFile renameWindow = new RenameFile(file);
                 renameWindow.ShowDialog();
+                Files.ItemsSource = null;
+                Files.ItemsSource = ((Directory)Directories.SelectedValue).Files;
             }
         }
     }
