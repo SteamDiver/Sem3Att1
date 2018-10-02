@@ -10,9 +10,9 @@
             P = p;
         }
 
-        protected override int GetQ()
+        public override double CalcQ()
         {
-            return P * LangCount;
+            return base.CalcQ() * P / ProgramCount;
         }
     }
 }

@@ -2,22 +2,19 @@
 {
     public class Programmer
     {
-        protected string Sername { get; }
-        protected int ProgramCount { get; }
-        protected int LangCount { get; }
+        public string Surname { get; }
+        public int ProgramCount { get; }
+        public int LangCount { get; }
 
-        public Programmer(string sername, int programCount, int langCount)
+        public Programmer(string surname, int programCount, int langCount)
         {
-            Sername = sername;
+            Surname = surname;
             ProgramCount = programCount;
             LangCount = langCount;
         }
 
-        protected virtual int GetQ() => ProgramCount * LangCount;
+        public virtual double CalcQ() => ProgramCount * LangCount;
 
-        public string GetInfo()
-        {
-            return $"Sername: {Sername}; ProgCount: {ProgramCount}; LangCount: {LangCount}; Q: {GetQ()}";
-        }
+        public double Q() => CalcQ();
     }
 }
