@@ -41,7 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Comedy.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="DomesticMovie.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="IMovie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

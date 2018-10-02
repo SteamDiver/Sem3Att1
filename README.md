@@ -1,4 +1,4 @@
 # Sem3Att1
-3 semester attestaton 1
+3 semester
 
-[![Build Status](https://travis-ci.org/SteamDiver/Sem3Att1.svg?branch=master)](https://travis-ci.org/SteamDiver/Sem3Att1)
+[![Build status](https://ci.appveyor.com/api/projects/status/gt8oe33vxh3l6f7c?svg=true)](https://ci.appveyor.com/project/SteamDiver/sem3att1)

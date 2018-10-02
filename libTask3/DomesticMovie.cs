@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace libTask3
 {
-    abstract class DomesticMovie : IMovie
+    public abstract class DomesticMovie : IMovie
     {
         public string Name { get; set; }
         public string Director { get; set; }
@@ -14,7 +14,7 @@ namespace libTask3
         public double CurrentPosition { get; set; }
         public bool IsStarted { get; set; }
 
-        protected DomesticMovie(string name, string director, double duration)
+        public DomesticMovie(string name, string director, double duration)
         {
             Name = name;
             Duration = duration;

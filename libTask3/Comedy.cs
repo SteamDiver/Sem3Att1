@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 
 namespace libTask3
 {
-    class Comedy : DomesticMovie
+    public class Comedy : DomesticMovie
     {
-        public List<object> Team { get; set; }
+        public Country Country { get; set; }
         public int Rating { get; set; }
 
-        public Comedy(string name, string director, double duration) : base(name, director, duration)
+        public Comedy(string name, string director, double duration, Country country) : base(name, director, duration)
         {
+            Country = country;
         }
 
-        public double GetRatingPerPerson() => Rating / Team.Count;
-
+        public void GoToStart()
+        {
+            CurrentPosition = 0;
+        }
         public void GoToEnd()
         {
             CurrentPosition = Duration;
