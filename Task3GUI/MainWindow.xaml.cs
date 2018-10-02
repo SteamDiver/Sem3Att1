@@ -24,6 +24,8 @@ namespace Task3GUI
     {
         public List<IMovie> Movies { get; set; } = new List<IMovie>();
 
+        private Timer T= new Timer(1000);
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,8 +39,10 @@ namespace Task3GUI
 
         private void UpdateItemsSource()
         {
+            var selectedIndex = DataGrid.SelectedIndex;
             DataGrid.ItemsSource = null;
             DataGrid.ItemsSource = Movies;
+            DataGrid.SelectedIndex = selectedIndex;
         }
 
         private void StartBtn_Click(object sender, RoutedEventArgs e)
@@ -46,16 +50,27 @@ namespace Task3GUI
             var row = DataGrid.SelectedIndex;
             if (row != -1)
             {
-                Timer t = new Timer(1000);
-                t.Elapsed += Timer_Tick;
-                t.Start();
+                Movies[row].Start();
             }
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void StopBtn_Click(object sender, RoutedEventArgs e)
         {
-            ((Comedy)Movies[0]).CurrentPosition += 1;
-            UpdateItemsSource();
+            var row = DataGrid.SelectedIndex;
+            if (row != -1)
+            {
+                Movies[row].Stop();
+            }
+        }
+
+        private void ForwardBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var row = DataGrid.SelectedIndex;
+            if (row != -1)
+            {
+                var seconds = int.Parse(ForwardTb.Text);
+                ((DomesticMovie)Movies[row]).Forward(seconds);
+            }
         }
     }
 }

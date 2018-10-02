@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
+using libTask3.Annotations;
 
 namespace libTask3
 {
@@ -10,35 +14,70 @@ namespace libTask3
     {
         public string Name { get; set; }
         public string Director { get; set; }
-        public double Duration { get; set; }
-        public double CurrentPosition { get; set; }
-        public bool IsStarted { get; set; }
+        public int Duration { get; set; }
 
-        public DomesticMovie(string name, string director, double duration)
+        private int _currentPosition;
+        public int CurrentPosition
+        {
+            get => _currentPosition;
+            set
+            {  
+                if (value >= Duration)
+                {
+                    _currentPosition = Duration;
+                    Stop();
+                }
+                else
+                {
+                    _currentPosition = value < 0 ? 0 : value;
+                }
+
+                OnPropertyChanged(nameof(CurrentPosition));
+            }
+        }
+
+        public bool IsStarted => T.Enabled;
+        public Timer T { get; } = new Timer(1000);
+
+        protected DomesticMovie(string name, string director, int duration)
         {
             Name = name;
             Duration = duration;
             Director = director;
+
+            T.Elapsed += (sender, args) =>
+            {
+                CurrentPosition++;
+                if (CurrentPosition == Duration)
+                    Stop();
+            };
         }
 
         public void Start()
         {
-            IsStarted = true;
+            if (CurrentPosition == Duration)
+                CurrentPosition = 0;
+            T.Start();
+            OnPropertyChanged(nameof(IsStarted));
         }
 
         public void Stop()
         {
-            IsStarted = false;
+            T.Stop();
+            OnPropertyChanged(nameof(IsStarted));
         }
 
-        public void Forward(double seconds)
+        public void Forward(int seconds)
         {
-            if (seconds + CurrentPosition < Duration)
-                CurrentPosition += seconds;
-            else
-            {
-                throw new Exception("Невозможно перемотать");
-            }
+            CurrentPosition += seconds;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

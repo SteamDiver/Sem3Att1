@@ -12,21 +12,24 @@
         <local:ObjectToTypeConverter x:Key="TypeConverter" />
     </Window.Resources>
     <Grid>
-        <DataGrid x:Name="DataGrid" Height="400" Margin="10,10,108.6,0" VerticalAlignment="Top" AutoGenerateColumns="False" ItemsSource="{Binding Movies}">
+        <DataGrid x:Name="DataGrid" Height="400" Margin="10,10,108.6,0" VerticalAlignment="Top" AutoGenerateColumns="False" ItemsSource="{Binding Movies, Mode=TwoWay, 
+                        UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Type" Binding="{Binding Mode=OneWay, Converter={StaticResource TypeConverter}}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Director" Binding="{Binding Path=Director}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Duration" Binding="{Binding Path=Duration}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Current Position" Binding="{Binding Path=CurrentPosition}"></DataGridTextColumn>
-                <DataGridTextColumn Header="IsStarted" Binding="{Binding Path=IsStarted}"></DataGridTextColumn>
+                <DataGridTextColumn Header="IsStarted" Binding="{Binding Path=IsStarted}" IsReadOnly="True"></DataGridTextColumn>
                 <DataGridTextColumn Header="Rating" Binding="{Binding Path=Rating}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Country" Binding="{Binding Path=Country}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="RandomBtn" Content="Random" Margin="0,13,9.6,0" VerticalAlignment="Top" Click="Random_Click" HorizontalAlignment="Right" Width="94"/>
-        <Button x:Name="StartBtn" Content="Start" Margin="690,37,9.6,0" VerticalAlignment="Top" Click="StartBtn_Click"/>
-        <Button x:Name="StopBtn" Content="Stop" Margin="690,61,9.6,0" VerticalAlignment="Top"/>
-        
+        <Button x:Name="StartBtn" Content="Start" Margin="0,37,9.6,0" VerticalAlignment="Top" Click="StartBtn_Click" HorizontalAlignment="Right" Width="94"/>
+        <Button x:Name="StopBtn" Content="Stop" Margin="0,61,9.6,0" VerticalAlignment="Top" Click="StopBtn_Click" HorizontalAlignment="Right" Width="94"/>
+        <Button x:Name="ForwardBtn" Content="Forward" Margin="0,160,9.6,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="94" Click="ForwardBtn_Click"/>
+        <TextBox x:Name="ForwardTb" Height="23" Margin="0,132,9.6,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="94" Text="0"/>
+
     </Grid>
 </Window>

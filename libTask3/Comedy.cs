@@ -11,7 +11,7 @@ namespace libTask3
         public Country Country { get; set; }
         public int Rating { get; set; }
 
-        public Comedy(string name, string director, double duration, Country country) : base(name, director, duration)
+        public Comedy(string name, string director, int duration, Country country) : base(name, director, duration)
         {
             Country = country;
         }
@@ -20,6 +20,7 @@ namespace libTask3
         {
             CurrentPosition = 0;
         }
+
         public void GoToEnd()
         {
             CurrentPosition = Duration;
