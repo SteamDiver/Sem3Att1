@@ -12,7 +12,7 @@
         <local:ObjectToTypeConverter x:Key="TypeConverter" />
     </Window.Resources>
     <Grid>
-        <DataGrid x:Name="DataGrid" Height="400" Margin="10,10,108.6,0" VerticalAlignment="Top" AutoGenerateColumns="False" ItemsSource="{Binding Movies, Mode=TwoWay, 
+        <DataGrid x:Name="DataGrid" Margin="10,10,108.6,10" AutoGenerateColumns="False" ItemsSource="{Binding Movies, Mode=TwoWay, 
                         UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Type" Binding="{Binding Mode=OneWay, Converter={StaticResource TypeConverter}}"></DataGridTextColumn>
