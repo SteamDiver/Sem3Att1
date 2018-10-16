@@ -25,5 +25,10 @@ namespace libTask3
         {
             CurrentPosition = Duration;
         }
+
+        public override void Forward(int seconds)
+        {
+            CurrentPosition += seconds;
+        }
     }
 }

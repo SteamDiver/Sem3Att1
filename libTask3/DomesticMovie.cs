@@ -67,10 +67,7 @@ namespace libTask3
             OnPropertyChanged(nameof(IsStarted));
         }
 
-        public void Forward(int seconds)
-        {
-            CurrentPosition += seconds;
-        }
+        public abstract void Forward(int seconds);
 
         public event PropertyChangedEventHandler PropertyChanged;
 
