@@ -41,8 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\Support.cs" />
-    <Compile Include="Interfaces\Item.cs" />
+    <Compile Include="Abstract\Service.cs" />
+    <Compile Include="Abstract\Worker.cs" />
+    <Compile Include="Abstract\Item.cs" />
+    <Compile Include="CarTanker.cs" />
+    <Compile Include="Interfaces\ISupport.cs" />
     <Compile Include="Mechanic.cs" />
     <Compile Include="OilTank.cs" />
     <Compile Include="PumpStation.cs" />

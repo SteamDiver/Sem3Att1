@@ -11,11 +11,12 @@
             <ColumnDefinition Width="665*"/>
             <ColumnDefinition Width="129*"/>
         </Grid.ColumnDefinitions>
-        <Canvas Margin="10,10,7.8,10">
+        <Canvas x:Name="MainCanvas" Margin="10,10,7.8,10">
             <Canvas.Background>
                 <ImageBrush ImageSource="Resources/back.png"></ImageBrush>
             </Canvas.Background>
         </Canvas>
+        <ProgressBar x:Name="TankStatusPb" Grid.Column="0" Margin="10,10,7.8,0" Height="28" VerticalAlignment="Top"/>
         <Canvas x:Name="PumpsCanv" Grid.Column="0" Margin="10,0,7.8,73" Height="107" VerticalAlignment="Bottom"/>
         <Button x:Name="AddPumpBtn" Content="Add pump"  Height="28" Click="AddPumpBtn_Click" Margin="10.2,10,9.6,0" Grid.Column="1" VerticalAlignment="Top"/>
         <Button x:Name="AddMechanic" Content="Add mechanic"  Height="28" Margin="10.2,38,9.6,0" Grid.Column="1" VerticalAlignment="Top" Click="AddMechanic_Click"/>

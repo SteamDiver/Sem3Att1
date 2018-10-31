@@ -1,21 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using libTask4.Abstract;
 using libTask4.Interfaces;
 
 namespace libTask4
 {
-    public class Mechanic : Support
+    public class Mechanic : Worker
     {
         public TimeSpan TimeToFix { get; private set; } = TimeSpan.FromSeconds(5);
 
         public delegate void MechanickEventHandler(Mechanic sender);
         public event MechanickEventHandler IsFree;
+        
 
-        public void FixObject(Item obj)
+        public override void DoWork(Item target)
+        {
+            FixObject(target);
+        }
+
+        private void FixObject(Item obj)
         {
             obj.IsFixing = true;
             IsBusy = true;

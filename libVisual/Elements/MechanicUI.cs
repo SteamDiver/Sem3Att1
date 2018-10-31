@@ -21,19 +21,19 @@ namespace libVisual.Elements
         public MechanicUI(Mechanic obj, SynchronizationContext context) : base(obj, context)
         {
             obj.IsFree += Mec_IsFree;
-            Image =
+            VisualElement =
                 new Image()
                 {
                     Height = 80
                 };
-            AnimationBehavior.SetSourceUri(Image, new Uri("pack://application:,,,/Resources/mechanic_idle.gif"));
+            AnimationBehavior.SetSourceUri((Image)VisualElement, new Uri("pack://application:,,,/Resources/mechanic_idle.gif"));
         }
 
         private void Mec_IsFree(Mechanic sender)
         {
             Context.Post(s =>
             {
-                AnimationBehavior.SetSourceUri(Image,
+                AnimationBehavior.SetSourceUri((Image)VisualElement,
                     new Uri("pack://application:,,,/Resources/mechanic_idle.gif"));
             }, null);
         }
@@ -42,16 +42,17 @@ namespace libVisual.Elements
         {
             Context.Post(s =>
             {
-                AnimationBehavior.SetSourceUri(Image, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
+                var o = (Image) VisualElement;
+                AnimationBehavior.SetSourceUri(o, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
                 var anim = new ThicknessAnimation();
-                var transform = new ScaleTransform {ScaleX = Image.Margin.Left > obj.Image.Margin.Left ? -1 : 1};
-                Image.RenderTransform = transform;
-                var to = obj.Image.Margin;
+                var transform = new ScaleTransform {ScaleX = o.Margin.Left > ((Image)obj.VisualElement).Margin.Left ? -1 : 1};
+                VisualElement.RenderTransform = transform;
+                var to = ((Image)obj.VisualElement).Margin;
                 to.Left += 80;
-                anim.From = Image.Margin;
+                anim.From = ((Image)VisualElement).Margin;
                 anim.To = to;
                 anim.Duration = TimeSpan.FromSeconds(1.5);
-                Image.BeginAnimation(FrameworkElement.MarginProperty, anim);
+                VisualElement.BeginAnimation(FrameworkElement.MarginProperty, anim);
             }, null);
         }
 

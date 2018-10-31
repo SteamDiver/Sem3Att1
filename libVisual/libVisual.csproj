@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Elements\MechanicUI.cs" />
     <Compile Include="Elements\PumpStationUI.cs" />
+    <Compile Include="Elements\TankUI.cs" />
     <Compile Include="ElementUI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VisualElementsFactory.cs" />

@@ -111,9 +111,6 @@
     <SplashScreen Include="Resources\splash.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\back.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\mechanic_idle.gif" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +118,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\pump.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\oilTank.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\back.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

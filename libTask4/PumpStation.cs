@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Timers;
 using libTask4.Interfaces;
+using Timer = System.Timers.Timer;
 
 namespace libTask4
 {
     public class PumpStation : Item
     {
         public double Productivity { get; set; }
+        public OilTank Tank { get; set; }
 
         public delegate void PumpStationEventHandler(PumpStation sender);
         public event PumpStationEventHandler Broken;
@@ -35,11 +38,14 @@ namespace libTask4
                 IsBroken = true;
                 Broken?.Invoke(this);
             }
+            else
+            {
+                Tank.AddOil(1, out double extra);
+            }
         }
 
         public void StopWork()
         {
-            _t.Stop();
         }
 
         public override void Fix()

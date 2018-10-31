@@ -18,12 +18,12 @@ namespace libVisual.Elements
         public PumpStation Station { get; set; }
         public PumpStationUI(int n, PumpStation st, SynchronizationContext context) : base(st, context)
         {
-            Image = new Image()
+            VisualElement = new Image()
             {
                 Margin = new Thickness(n * 250, 0, 0, 0),
                 Height = 180
             };
-            AnimationBehavior.SetSourceUri(Image, new Uri("pack://application:,,,/Resources/pump.gif"));
+            AnimationBehavior.SetSourceUri((Image)VisualElement, new Uri("pack://application:,,,/Resources/pump.gif"));
             Station = st;
             Station.Broken += Station_Broken;
             Station.Fixed += Station_Fixed;
@@ -41,12 +41,12 @@ namespace libVisual.Elements
 
         private void StopAnimation()
         {
-            AnimationBehavior.GetAnimator(Image).Pause();
+            AnimationBehavior.GetAnimator(VisualElement).Pause();
         }
 
         private void StartAnimation()
         {
-            AnimationBehavior.GetAnimator(Image).Play();
+            AnimationBehavior.GetAnimator(VisualElement).Play();
         }
     }
 }
