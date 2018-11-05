@@ -22,6 +22,7 @@ namespace libVisual.Elements
                 new Image()
                 {
                     Height = 160,
+                    Margin = new Thickness(-160, 500, 0, 0),
                     Source = new BitmapImage(new Uri("pack://application:,,,/Resources/carTanker.png"))
                 };
         }
@@ -36,11 +37,10 @@ namespace libVisual.Elements
 
         private void Tank_IsFull(OilTank sender)
         {
-            //lock (this)
-            //{
-            //    LogicObj.DoWork(sender);
-            //}
-            MessageBox.Show("Tank full");
+            new Task(()=>
+            {
+                LogicObj.DoWork(sender);
+            }).Start();
         }
     }
 }

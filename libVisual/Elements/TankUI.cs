@@ -14,10 +14,16 @@ namespace libVisual.Elements
     {
         public OilTankUI(ProgressBar bar, SynchronizationContext context) : base(context)
         {
-            LogicObj = new OilTank(10);
+            LogicObj = new OilTank(100);
             bar.Maximum = LogicObj.Capacity;
             VisualElement = bar;
             LogicObj.Added += LogicObj_Added;
+            LogicObj.IsEmpty += LogicObj_IsEmpty;
+        }
+
+        private void LogicObj_IsEmpty(OilTank sender)
+        { 
+            Context.Post(s => { ((ProgressBar)VisualElement).Value = sender.CurrentVolume; }, null);
         }
 
         private void LogicObj_Added(OilTank tank)

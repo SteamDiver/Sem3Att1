@@ -12,7 +12,7 @@ namespace libTask4
 {
     public class Mechanic : Worker
     {
-        public TimeSpan TimeToFix { get; private set; } = TimeSpan.FromSeconds(5);
+        public TimeSpan TimeToFix { get; private set; } = TimeSpan.FromSeconds(2);
 
         public delegate void MechanickEventHandler(Mechanic sender);
         public event MechanickEventHandler IsFree;

@@ -27,13 +27,14 @@ namespace Task4GUI
         List<PumpStationUI> pumpList = new List<PumpStationUI>();
         List<MechanicUI> mechanicks = new List<MechanicUI>();
         private OilTankUI tank;
-        //private CarTankerUI car;
+        private CarTankerUI car;
         private VisualElementsFactory _uiFactory = new VisualElementsFactory(SynchronizationContext.Current);
+
         public MainWindow()
         {
            InitializeComponent();
            InitOilTank();
-            InitCarTank();
+           InitCarTank();
         }
 
         private void AddPumpBtn_Click(object sender, RoutedEventArgs e)
@@ -44,6 +45,10 @@ namespace Task4GUI
             pumpStation.Start();
             PumpsCanv.Children.Add(pumpStation.VisualElement);
             pumpList.Add(pumpStation);
+
+            MediaPlayer player = new MediaPlayer();
+            player.Open(new Uri("pack://application:,,,/Resources/melkie_puzyrki.mp3"));
+            player.Play();
         }
 
         private void St_Broken(PumpStation sender)
@@ -53,7 +58,7 @@ namespace Task4GUI
             {
                 new Task(() => m.LogicObj.DoWork(sender)).Start();
                 var uiObject = pumpList.Find(x => x.LogicObj.Equals(sender));
-                m.MoveTo(uiObject);
+                m.MoveTo(uiObject, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
             }
 
         }
@@ -73,7 +78,7 @@ namespace Task4GUI
             if (needToRepair != null && !needToRepair.LogicObj.IsFixing)
             {
                 var m = mechanicks.Find(x => x.LogicObj.Equals(sender));
-                m.MoveTo(needToRepair);
+                m.MoveTo(needToRepair, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
                 new Task(() => sender.DoWork(needToRepair.LogicObj)).Start();
             }
 
@@ -82,18 +87,25 @@ namespace Task4GUI
         private void InitOilTank()
         {
             tank = _uiFactory.CreateOilTankUI(TankStatusPb);
-            //tank.LogicObj.IsFull += TankObj_IsFull;
+            tank.LogicObj.IsFull += TankObj_IsFull;
+            tank.LogicObj.IsEmpty += LogicObj_IsEmpty;
+        }
+
+        private void LogicObj_IsEmpty(OilTank sender)
+        {
+            car.MoveTo(new Thickness(-200, 500, 0, 0), new Uri("pack://application:,,,/Resources/carTanker.png"));
+        }
+
+        private void TankObj_IsFull(OilTank sender)
+        {
+            car.MoveTo(new Thickness(600, 500, 0, 0), new Uri("pack://application:,,,/Resources/carTanker.png"));
         }
 
         private void InitCarTank()
         {
-            //car = _uiFactory.CreateCarTankUI();
-            //car.LinkToTanks(new List<OilTankUI>(){tank});
+            car = _uiFactory.CreateCarTankUI();
+            car.LinkToTanks(new List<OilTankUI>(){tank});
+            MainCanvas.Children.Add(car.VisualElement);
         }
-
-        //private void TankObj_IsFull(OilTank sender)
-        //{
-        //    car?.DoWork(sender);
-        //}
     }
 }

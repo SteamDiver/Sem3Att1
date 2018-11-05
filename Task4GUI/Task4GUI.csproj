@@ -128,5 +128,9 @@
   <ItemGroup>
     <Resource Include="Resources\carTanker.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\melkie_puzyrki.mp3" />
+    <Content Include="Resources\tualet_spusk_vody_2.mp3" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

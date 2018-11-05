@@ -25,24 +25,32 @@ namespace libTask4
 
         public void AddOil(double amount)
         {
-            Added?.Invoke(this);
             if (CurrentVolume + amount <= Capacity)
             {
+                if (CurrentVolume + amount == Capacity)
+                    IsFull?.Invoke(this);
+
                 CurrentVolume += amount;
-            }
-            else
-            {
-                CurrentVolume = Capacity;
-                IsFull?.Invoke(this);
+                Added?.Invoke(this);
+
             }
         }
 
-        public double GetAll()
+        public void Get(double val)
+        {
+            if (val < CurrentVolume && CurrentVolume != 0)
+                CurrentVolume -= val;
+            else
+            {
+                CurrentVolume = 0;
+                IsEmpty?.Invoke(this);
+            }
+        }
+
+        public void Get()
         {
             CurrentVolume = 0;
             IsEmpty?.Invoke(this);
-
-            return CurrentVolume;
         }
 
         public override void Fix()

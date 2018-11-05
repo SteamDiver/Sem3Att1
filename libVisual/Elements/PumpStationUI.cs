@@ -33,7 +33,16 @@ namespace libVisual.Elements
         public void LinkToTank(OilTankUI tank)
         {
             LogicObj.Tank = tank.LogicObj;
-            LogicObj.Tank.IsFull += (sender) => { Stop(); };
+            LogicObj.Tank.IsFull += (sender) =>
+            {
+                if(LogicObj.IsWorking)
+                   Stop();
+            };
+            LogicObj.Tank.IsEmpty += (sender) =>
+            {
+                if (!LogicObj.IsBroken)
+                    Start();
+            };
         }
 
         public void Start()
@@ -53,7 +62,8 @@ namespace libVisual.Elements
 
         private void Station_Fixed(PumpStation sender)
         {
-           Start();
+            if(LogicObj.Tank.CurrentVolume < LogicObj.Tank.Capacity)
+                Start();
         }
 
         private void Station_Broken(PumpStation sender)
@@ -63,12 +73,15 @@ namespace libVisual.Elements
 
         private void StopAnimation()
         {
-            Context.Post(s=> AnimationBehavior.GetAnimator(VisualElement)?.Pause(), null);
+            Context.Post(s=> AnimationBehavior.GetAnimator(VisualElement).Pause(), null);
         }
 
         private void StartAnimation()
         {
-            Context.Post(s=>AnimationBehavior.GetAnimator(VisualElement)?.Play(), null);
+            Context.Post(s =>
+            {
+                AnimationBehavior.GetAnimator(VisualElement)?.Play();
+            }, null);
         }
     }
 }
