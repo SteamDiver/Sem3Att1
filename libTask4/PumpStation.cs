@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using libTask4.Interfaces;
 using Timer = System.Timers.Timer;
@@ -21,9 +22,9 @@ namespace libTask4
 
         private readonly double _brakeChance = 0.05;
         private readonly Timer _t = new Timer(1000);
-        private readonly Random rnd = new Random();
+        private readonly Random _rnd = new Random();
 
-
+        
 
         public void StartWork()
         {
@@ -33,19 +34,18 @@ namespace libTask4
 
         private void _t_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (rnd.NextDouble() <= _brakeChance && !IsBroken)
+            if (_rnd.NextDouble() <= _brakeChance && !IsBroken)
             {
                 IsBroken = true;
                 Broken?.Invoke(this);
             }
-            else
-            {
-                Tank.AddOil(1, out double extra);
-            }
+            if(!IsBroken)
+                new Task(() => Tank.AddOil(1)).Start();
         }
 
         public void StopWork()
         {
+            _t.Stop();
         }
 
         public override void Fix()

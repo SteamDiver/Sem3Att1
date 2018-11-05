@@ -12,23 +12,17 @@ namespace libVisual.Elements
 {
     public class OilTankUI : ElementUI<OilTank>
     {
-        public OilTankUI(OilTank obj, SynchronizationContext context) : base(obj, context)
+        public OilTankUI(ProgressBar bar, SynchronizationContext context) : base(context)
         {
+            LogicObj = new OilTank(10);
+            bar.Maximum = LogicObj.Capacity;
+            VisualElement = bar;
+            LogicObj.Added += LogicObj_Added;
         }
 
-        public void Init(object o)
+        private void LogicObj_Added(OilTank tank)
         {
-            Context.Post(s =>
-            {
-                VisualElement = (ProgressBar) o;
-                ((ProgressBar) o).Maximum = LogicObj.Capacity;
-                LogicObj.Added += LogicObj_Added;
-            }, null);
-        }
-
-        private void LogicObj_Added()
-        {
-            Context.Post(s => { ((ProgressBar) VisualElement).Value++; }, null);
+            Context.Post(s => { ((ProgressBar) VisualElement).Value = tank.CurrentVolume; }, null);
         }
     }
 }

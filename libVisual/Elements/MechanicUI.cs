@@ -18,9 +18,10 @@ namespace libVisual.Elements
 {
     public class MechanicUI : ElementUI<Mechanic>
     {
-        public MechanicUI(Mechanic obj, SynchronizationContext context) : base(obj, context)
+        public MechanicUI( SynchronizationContext context) : base(context)
         {
-            obj.IsFree += Mec_IsFree;
+            LogicObj =new Mechanic();
+            LogicObj.IsFree += Mec_IsFree;
             VisualElement =
                 new Image()
                 {

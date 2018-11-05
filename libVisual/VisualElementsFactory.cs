@@ -22,14 +22,24 @@ namespace libVisual
             Context = context;
         }
 
-        public PumpStationUI CreatePumpStationUI(int n, PumpStation stationObj)
+        public PumpStationUI CreatePumpStationUI(int n)
         {
-            return new PumpStationUI(n, stationObj, Context);
+            return new PumpStationUI(n, Context);
         }
 
-        public MechanicUI CreateMechanicUI(int n, Mechanic mechanicObj)
+        public MechanicUI CreateMechanicUI(int n)
         {
-            return new MechanicUI(mechanicObj, Context);
+            return new MechanicUI(Context);
+        }
+
+        public OilTankUI CreateOilTankUI(ProgressBar bar)
+        {
+            return new OilTankUI(bar, Context);
+        }
+
+        public CarTankerUI CreateCarTankUI()
+        {
+            return new CarTankerUI(Context);
         }
     }
 }

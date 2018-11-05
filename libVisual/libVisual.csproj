@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Elements\CarTankerUI.cs" />
     <Compile Include="Elements\MechanicUI.cs" />
     <Compile Include="Elements\PumpStationUI.cs" />
     <Compile Include="Elements\TankUI.cs" />

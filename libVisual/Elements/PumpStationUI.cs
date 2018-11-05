@@ -15,8 +15,9 @@ namespace libVisual.Elements
 {
     public class PumpStationUI : ElementUI<PumpStation>
     {
-        public PumpStation Station { get; set; }
-        public PumpStationUI(int n, PumpStation st, SynchronizationContext context) : base(st, context)
+        public bool IsLinked => LogicObj?.Tank != null;
+
+        public PumpStationUI(int n, SynchronizationContext context) : base(context)
         {
             VisualElement = new Image()
             {
@@ -24,29 +25,50 @@ namespace libVisual.Elements
                 Height = 180
             };
             AnimationBehavior.SetSourceUri((Image)VisualElement, new Uri("pack://application:,,,/Resources/pump.gif"));
-            Station = st;
-            Station.Broken += Station_Broken;
-            Station.Fixed += Station_Fixed;
+            LogicObj = new PumpStation();
+            LogicObj.Broken += Station_Broken;
+            LogicObj.Fixed += Station_Fixed;
+        }
+
+        public void LinkToTank(OilTankUI tank)
+        {
+            LogicObj.Tank = tank.LogicObj;
+            LogicObj.Tank.IsFull += (sender) => { Stop(); };
+        }
+
+        public void Start()
+        {
+            if (IsLinked)
+            {
+                StartAnimation();
+                LogicObj.StartWork();
+            }
+        }
+
+        public void Stop()
+        {
+            StopAnimation();
+            LogicObj.StopWork();
         }
 
         private void Station_Fixed(PumpStation sender)
         {
-            Context.Post(s => StartAnimation(), null);
+           Start();
         }
 
         private void Station_Broken(PumpStation sender)
         {
-           Context.Post(s => StopAnimation(), null);
+           Stop();
         }
 
         private void StopAnimation()
         {
-            AnimationBehavior.GetAnimator(VisualElement).Pause();
+            Context.Post(s=> AnimationBehavior.GetAnimator(VisualElement)?.Pause(), null);
         }
 
         private void StartAnimation()
         {
-            AnimationBehavior.GetAnimator(VisualElement).Play();
+            Context.Post(s=>AnimationBehavior.GetAnimator(VisualElement)?.Play(), null);
         }
     }
 }

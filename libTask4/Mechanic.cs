@@ -16,7 +16,6 @@ namespace libTask4
 
         public delegate void MechanickEventHandler(Mechanic sender);
         public event MechanickEventHandler IsFree;
-        
 
         public override void DoWork(Item target)
         {
@@ -25,13 +24,16 @@ namespace libTask4
 
         private void FixObject(Item obj)
         {
-            obj.IsFixing = true;
-            IsBusy = true;
-            Thread.Sleep(TimeToFix);
-            obj.Fix();
-            obj.IsFixing = false;
-            IsBusy = false;
-            OnFree();
+            lock (obj)
+            {
+                obj.IsFixing = true;
+                IsBusy = true;
+                Thread.Sleep(TimeToFix);
+                obj.Fix();
+                obj.IsFixing = false;
+                IsBusy = false;
+                OnFree();
+            }
         }
 
         protected virtual void OnFree()

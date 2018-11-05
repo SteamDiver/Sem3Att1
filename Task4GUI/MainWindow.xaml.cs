@@ -27,31 +27,24 @@ namespace Task4GUI
         List<PumpStationUI> pumpList = new List<PumpStationUI>();
         List<MechanicUI> mechanicks = new List<MechanicUI>();
         private OilTankUI tank;
+        //private CarTankerUI car;
         private VisualElementsFactory _uiFactory = new VisualElementsFactory(SynchronizationContext.Current);
         public MainWindow()
         {
            InitializeComponent();
            InitOilTank();
+            InitCarTank();
         }
 
-        private int _counter;
         private void AddPumpBtn_Click(object sender, RoutedEventArgs e)
         {
-            PumpStation st = new PumpStation()
-            {
-                Tank = tank.LogicObj
-            };
-            Thread th = new Thread(st.StartWork);
-            st.Tank.IsFull += ()=>{st.StopWork();};
-            var pumpStation = _uiFactory.CreatePumpStationUI(_counter++, st);
+            var pumpStation = _uiFactory.CreatePumpStationUI(pumpList.Count);
+            pumpStation.LinkToTank(tank);
+            pumpStation.LogicObj.Broken += St_Broken;
+            pumpStation.Start();
             PumpsCanv.Children.Add(pumpStation.VisualElement);
             pumpList.Add(pumpStation);
-
-            st.Broken += St_Broken;
-            th.Start();
         }
-
-       
 
         private void St_Broken(PumpStation sender)
         {
@@ -67,30 +60,40 @@ namespace Task4GUI
 
         private void AddMechanic_Click(object sender, RoutedEventArgs e)
         {
-            var m = new Mechanic();
-            MechanicUI mec = new MechanicUI(m, SynchronizationContext.Current);
-            m.IsFree += M_IsFree;
+            MechanicUI mec = new MechanicUI(SynchronizationContext.Current);
+            mec.LogicObj.IsFree += M_IsFree;
             mechanicks.Add(mec);
             PumpsCanv.Children.Add(mec.VisualElement);
+            M_IsFree(mec.LogicObj);
         }
 
         private void M_IsFree(Mechanic sender)
         {
-            var needToRepair = pumpList.Find(x => x.Station.IsBroken);
-            if (needToRepair != null && !needToRepair.Station.IsFixing)
+            var needToRepair = pumpList.Find(x => x.LogicObj.IsBroken);
+            if (needToRepair != null && !needToRepair.LogicObj.IsFixing)
             {
-                new Task(() => sender.DoWork(needToRepair.Station)).Start();
                 var m = mechanicks.Find(x => x.LogicObj.Equals(sender));
                 m.MoveTo(needToRepair);
+                new Task(() => sender.DoWork(needToRepair.LogicObj)).Start();
             }
 
         }
 
         private void InitOilTank()
         {
-            tank = new OilTankUI(new OilTank(100), SynchronizationContext.Current);
-            Thread th = new Thread(tank.Init);
-            th.Start(TankStatusPb);
+            tank = _uiFactory.CreateOilTankUI(TankStatusPb);
+            //tank.LogicObj.IsFull += TankObj_IsFull;
         }
+
+        private void InitCarTank()
+        {
+            //car = _uiFactory.CreateCarTankUI();
+            //car.LinkToTanks(new List<OilTankUI>(){tank});
+        }
+
+        //private void TankObj_IsFull(OilTank sender)
+        //{
+        //    car?.DoWork(sender);
+        //}
     }
 }

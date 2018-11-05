@@ -18,9 +18,8 @@ namespace libVisual
         public SynchronizationContext Context { get; set; }
         public UIElement VisualElement { get; set; }
 
-        public ElementUI(T obj, SynchronizationContext context)
+        public ElementUI(SynchronizationContext context)
         {
-            LogicObj = obj;
             Context = context;
         }
     }
