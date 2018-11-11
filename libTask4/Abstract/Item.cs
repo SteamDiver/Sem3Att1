@@ -8,7 +8,6 @@ namespace libTask4.Interfaces
 {
     public abstract class Item
     {
-        public bool IsFixing { get; set; }
         public bool IsBroken { get; set; }
 
         public abstract void Fix();

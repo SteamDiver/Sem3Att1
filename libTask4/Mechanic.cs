@@ -17,6 +17,9 @@ namespace libTask4
         public delegate void MechanickEventHandler(Mechanic sender);
         public event MechanickEventHandler IsFree;
 
+        public static Semaphore Semaphore = new Semaphore(2, 2);
+        public static int SemCount { get; private set; } = 2;
+
         public override void DoWork(Item target)
         {
             FixObject(target);
@@ -24,20 +27,10 @@ namespace libTask4
 
         private void FixObject(Item obj)
         {
-            lock (obj)
-            {
-                obj.IsFixing = true;
-                IsBusy = true;
-                Thread.Sleep(TimeToFix);
-                obj.Fix();
-                obj.IsFixing = false;
-                IsBusy = false;
-                OnFree();
-            }
-        }
-
-        protected virtual void OnFree()
-        {
+            Semaphore.WaitOne();
+            Thread.Sleep(TimeToFix);
+            obj.Fix();
+            SemCount = Semaphore.Release();
             IsFree?.Invoke(this);
         }
     }

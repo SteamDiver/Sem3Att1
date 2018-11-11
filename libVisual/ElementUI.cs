@@ -36,6 +36,7 @@ namespace libVisual
                 VisualElement.RenderTransform = transform;
                 var to = ((Image)obj.VisualElement).Margin;
                 to.Left += 80;
+                to.Top += 80;
                 anim.From = ((Image)VisualElement).Margin;
                 anim.To = to;
                 anim.Duration = TimeSpan.FromSeconds(1.5);

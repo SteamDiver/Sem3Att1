@@ -15,44 +15,34 @@ namespace libTask4
     {
         public double Productivity { get; set; }
         public OilTank Tank { get; set; }
-        public bool IsWorking => _t.Enabled;
         public delegate void PumpStationEventHandler(PumpStation sender);
         public event PumpStationEventHandler Broken;
         public event PumpStationEventHandler Fixed;
 
+        public bool IsWorking { get; set; }
         private readonly double _brakeChance = 0.05;
-        private readonly Timer _t = new Timer(1000){};
         private readonly Random _rnd = new Random();
-
-        public PumpStation()
-        {
-            _t.Elapsed += _t_Elapsed;
-        }
 
         public void StartWork()
         {
-            _t.Enabled = true;
-            _t.Start();
-        }
-
-        private void _t_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            if (_rnd.NextDouble() <= _brakeChance && !IsBroken)
+            IsWorking = true;
+            while (IsWorking)
             {
-                IsBroken = true;
-                Broken?.Invoke(this);
-            }
-            if(!IsBroken)
-                new Task(() =>
+                if (_rnd.NextDouble() <= _brakeChance && !IsBroken)
                 {
-                    if(Tank.CurrentVolume < Tank.Capacity)
-                        Tank.AddOil(1);
-                }).Start();
+                    IsBroken = true;
+                    Broken?.Invoke(this);
+                    return;
+                }
+                if (!IsBroken && Tank.CurrentVolume < Tank.Capacity)
+                   Tank.AddOil(1);
+                Thread.Sleep(1000);
+            }
         }
 
         public void StopWork()
         {
-            _t.Enabled = false;
+            IsWorking = false;
         }
 
         public override void Fix()

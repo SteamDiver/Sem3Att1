@@ -20,26 +20,35 @@ namespace libVisual.Elements
     {
         public MechanicUI( SynchronizationContext context) : base(context)
         {
-            LogicObj =new Mechanic();
+            LogicObj = new Mechanic();
             LogicObj.IsFree += Mec_IsFree;
             VisualElement =
                 new Image()
                 {
-                    Height = 80
+                    Height = 80,
+                    Margin = new Thickness(10, 80, 0, 0)
                 };
             AnimationBehavior.SetSourceUri((Image)VisualElement, new Uri("pack://application:,,,/Resources/mechanic_idle.gif"));
         }
 
         private void Mec_IsFree(Mechanic sender)
         {
-            Context.Post(s =>
+            Context.Send(s =>
             {
                 AnimationBehavior.SetSourceUri((Image)VisualElement,
                     new Uri("pack://application:,,,/Resources/mechanic_idle.gif"));
             }, null);
         }
 
+        public void DoWork(Item target)
+        {
+            Context.Send(s =>
+            {
+                AnimationBehavior.SetSourceUri((Image)VisualElement,
+                    new Uri("pack://application:,,,/Resources/work.gif"));
+            }, null);
 
-
+            LogicObj.DoWork(target);
+        }
     }
 }

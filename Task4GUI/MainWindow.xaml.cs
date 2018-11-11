@@ -25,16 +25,18 @@ namespace Task4GUI
     public partial class MainWindow : Window
     {
         List<PumpStationUI> pumpList = new List<PumpStationUI>();
-        List<MechanicUI> mechanicks = new List<MechanicUI>();
+        Queue<MechanicUI> mechanicks = new Queue<MechanicUI>();
+        Queue<PumpStationUI> brokenStations = new Queue<PumpStationUI>();
+
         private OilTankUI tank;
         private CarTankerUI car;
         private VisualElementsFactory _uiFactory = new VisualElementsFactory(SynchronizationContext.Current);
 
         public MainWindow()
         {
-           InitializeComponent();
-           InitOilTank();
-           InitCarTank();
+            InitializeComponent();
+            InitOilTank();
+            InitCarTank();
         }
 
         private void AddPumpBtn_Click(object sender, RoutedEventArgs e)
@@ -53,12 +55,38 @@ namespace Task4GUI
 
         private void St_Broken(PumpStation sender)
         {
-            var m = mechanicks.Find(x => !x.LogicObj.IsBusy);
-            if (m != null)
+            new Task(() =>
             {
-                new Task(() => m.LogicObj.DoWork(sender)).Start();
-                var uiObject = pumpList.Find(x => x.LogicObj.Equals(sender));
-                m.MoveTo(uiObject, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
+                brokenStations.Enqueue(pumpList.Find(x => x.LogicObj.Equals(sender)));
+                Fix();
+            }).Start();
+           
+        }
+
+        private void Fix()
+        {
+                while (brokenStations.Count > 0)
+                {
+                    var station = brokenStations.Dequeue();
+
+                    if (mechanicks.Count > 0 && Mechanic.SemCount > 0)
+                    {
+                        try
+                        {
+                            var m = mechanicks.Dequeue();
+                            if (m != null)
+                            {
+                                m.MoveTo(station, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
+                                Thread.Sleep(2000);
+                                m.DoWork(station.LogicObj);
+                                mechanicks.Enqueue(m);
+                            }
+                        }
+                        catch
+                        {
+                            //ignore
+                        }
+                    }
             }
 
         }
@@ -66,23 +94,10 @@ namespace Task4GUI
         private void AddMechanic_Click(object sender, RoutedEventArgs e)
         {
             MechanicUI mec = new MechanicUI(SynchronizationContext.Current);
-            mec.LogicObj.IsFree += M_IsFree;
-            mechanicks.Add(mec);
+            mechanicks.Enqueue(mec);
             PumpsCanv.Children.Add(mec.VisualElement);
-            M_IsFree(mec.LogicObj);
         }
 
-        private void M_IsFree(Mechanic sender)
-        {
-            var needToRepair = pumpList.Find(x => x.LogicObj.IsBroken);
-            if (needToRepair != null && !needToRepair.LogicObj.IsFixing)
-            {
-                var m = mechanicks.Find(x => x.LogicObj.Equals(sender));
-                m.MoveTo(needToRepair, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
-                new Task(() => sender.DoWork(needToRepair.LogicObj)).Start();
-            }
-
-        }
 
         private void InitOilTank()
         {
@@ -104,7 +119,7 @@ namespace Task4GUI
         private void InitCarTank()
         {
             car = _uiFactory.CreateCarTankUI();
-            car.LinkToTanks(new List<OilTankUI>(){tank});
+            car.LinkToTanks(new List<OilTankUI>() { tank });
             MainCanvas.Children.Add(car.VisualElement);
         }
     }

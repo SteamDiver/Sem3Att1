@@ -24,20 +24,16 @@ namespace libVisual.Elements
                 Margin = new Thickness(n * 250, 0, 0, 0),
                 Height = 180
             };
-            AnimationBehavior.SetSourceUri((Image)VisualElement, new Uri("pack://application:,,,/Resources/pump.gif"));
             LogicObj = new PumpStation();
             LogicObj.Broken += Station_Broken;
             LogicObj.Fixed += Station_Fixed;
+            AnimationBehavior.SetSourceUri((Image)VisualElement, new Uri("pack://application:,,,/Resources/pump.gif"));
         }
 
         public void LinkToTank(OilTankUI tank)
         {
             LogicObj.Tank = tank.LogicObj;
-            LogicObj.Tank.IsFull += (sender) =>
-            {
-                if(LogicObj.IsWorking)
-                   Stop();
-            };
+           
             LogicObj.Tank.IsEmpty += (sender) =>
             {
                 if (!LogicObj.IsBroken)
@@ -50,7 +46,7 @@ namespace libVisual.Elements
             if (IsLinked)
             {
                 StartAnimation();
-                LogicObj.StartWork();
+                new Task(() => LogicObj.StartWork()).Start();
             }
         }
 
@@ -62,8 +58,7 @@ namespace libVisual.Elements
 
         private void Station_Fixed(PumpStation sender)
         {
-            if(LogicObj.Tank.CurrentVolume < LogicObj.Tank.Capacity)
-                Start();
+            Start();
         }
 
         private void Station_Broken(PumpStation sender)
@@ -73,12 +68,12 @@ namespace libVisual.Elements
 
         private void StopAnimation()
         {
-            Context.Post(s=> AnimationBehavior.GetAnimator(VisualElement).Pause(), null);
+            Context.Send(s=> AnimationBehavior.GetAnimator(VisualElement)?.Pause(), null);
         }
 
         private void StartAnimation()
         {
-            Context.Post(s =>
+            Context.Send(s =>
             {
                 AnimationBehavior.GetAnimator(VisualElement)?.Play();
             }, null);

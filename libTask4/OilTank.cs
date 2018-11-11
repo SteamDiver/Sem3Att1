@@ -27,7 +27,7 @@ namespace libTask4
         {
             if (CurrentVolume + amount <= Capacity)
             {
-                if (CurrentVolume + amount == Capacity)
+                if (CurrentVolume + amount == Capacity - 50)
                     IsFull?.Invoke(this);
 
                 CurrentVolume += amount;
