@@ -28,8 +28,7 @@ namespace libTask4
         private void FixObject(Item obj)
         {
             Semaphore.WaitOne();
-            Thread.Sleep(TimeToFix);
-            obj.Fix();
+            obj.Fix(TimeToFix);
             SemCount = Semaphore.Release();
             IsFree?.Invoke(this);
         }

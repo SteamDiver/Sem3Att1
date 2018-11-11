@@ -22,6 +22,7 @@ namespace libTask4
         public bool IsWorking { get; set; }
         private readonly double _brakeChance = 0.05;
         private readonly Random _rnd = new Random();
+        private static object lockObj = new object();
 
         public void StartWork()
         {
@@ -45,9 +46,13 @@ namespace libTask4
             IsWorking = false;
         }
 
-        public override void Fix()
+        public override void Fix(TimeSpan time)
         {
-            IsBroken = false;
+            lock (lockObj)
+            {
+                Thread.Sleep(time);
+                IsBroken = false;
+            }
             Fixed?.Invoke(this);
         }
     }

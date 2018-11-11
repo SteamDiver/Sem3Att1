@@ -53,7 +53,7 @@ namespace libTask4
             IsEmpty?.Invoke(this);
         }
 
-        public override void Fix()
+        public override void Fix(TimeSpan time)
         {
             throw new NotImplementedException();
         }

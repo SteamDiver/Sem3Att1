@@ -25,7 +25,7 @@ namespace libVisual
             Context = context;
         }
 
-        public void MoveTo<T>(ElementUI<T> obj, Uri uri)
+        public void MoveTo<TG>(ElementUI<TG> obj, Uri uri)
         {
             Context.Post(s =>
             {

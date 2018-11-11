@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -25,8 +26,9 @@ namespace Task4GUI
     public partial class MainWindow : Window
     {
         List<PumpStationUI> pumpList = new List<PumpStationUI>();
-        Queue<MechanicUI> mechanicks = new Queue<MechanicUI>();
-        Queue<PumpStationUI> brokenStations = new Queue<PumpStationUI>();
+
+        BufferBlock<MechanicUI> mechanicks = new BufferBlock<MechanicUI>();
+        BufferBlock<PumpStation> brokenStations = new BufferBlock<PumpStation>();
 
         private OilTankUI tank;
         private CarTankerUI car;
@@ -37,6 +39,8 @@ namespace Task4GUI
             InitializeComponent();
             InitOilTank();
             InitCarTank();
+            Thread fixFactoryThread = new Thread(FixFactory);
+            fixFactoryThread.Start();
         }
 
         private void AddPumpBtn_Click(object sender, RoutedEventArgs e)
@@ -55,38 +59,36 @@ namespace Task4GUI
 
         private void St_Broken(PumpStation sender)
         {
-            new Task(() =>
-            {
-                brokenStations.Enqueue(pumpList.Find(x => x.LogicObj.Equals(sender)));
-                Fix();
-            }).Start();
-           
+            brokenStations.Post(sender);
         }
 
-        private void Fix()
+        private static object lockObj = new object();
+        private async void FixFactory()
         {
-                while (brokenStations.Count > 0)
+            while (true)
+            {
+                if (brokenStations.Count > 0 && mechanicks.Count > 0)
                 {
-                    var station = brokenStations.Dequeue();
+                    Task t = new Task(TryFix);
+                    t.Start();
+                }
+            }
+        }
 
-                    if (mechanicks.Count > 0 && Mechanic.SemCount > 0)
-                    {
-                        try
-                        {
-                            var m = mechanicks.Dequeue();
-                            if (m != null)
-                            {
-                                m.MoveTo(station, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
-                                Thread.Sleep(2000);
-                                m.DoWork(station.LogicObj);
-                                mechanicks.Enqueue(m);
-                            }
-                        }
-                        catch
-                        {
-                            //ignore
-                        }
-                    }
+        private async void TryFix()
+        {
+
+            var st = await brokenStations.ReceiveAsync();
+            var station = pumpList.Find(x => x.LogicObj.Equals(st));
+
+            var m = await mechanicks.ReceiveAsync();
+
+            if (m != null && station != null)
+            {
+                m.MoveTo(station, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
+                Thread.Sleep(1500);
+                m.DoWork(station.LogicObj);
+                mechanicks.Post(m);
             }
 
         }
@@ -94,9 +96,10 @@ namespace Task4GUI
         private void AddMechanic_Click(object sender, RoutedEventArgs e)
         {
             MechanicUI mec = new MechanicUI(SynchronizationContext.Current);
-            mechanicks.Enqueue(mec);
+            mechanicks.Post(mec);
             PumpsCanv.Children.Add(mec.VisualElement);
         }
+
 
 
         private void InitOilTank()

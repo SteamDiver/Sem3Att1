@@ -10,6 +10,6 @@ namespace libTask4.Interfaces
     {
         public bool IsBroken { get; set; }
 
-        public abstract void Fix();
+        public abstract void Fix(TimeSpan time);
     }
 }

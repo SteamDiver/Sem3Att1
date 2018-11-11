@@ -46,7 +46,8 @@ namespace libVisual.Elements
             if (IsLinked)
             {
                 StartAnimation();
-                new Task(() => LogicObj.StartWork()).Start();
+                Thread pumpThread = new Thread(LogicObj.StartWork);
+                pumpThread.Start();
             }
         }
 
