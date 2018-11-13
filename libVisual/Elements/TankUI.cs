@@ -30,5 +30,7 @@ namespace libVisual.Elements
         {
             Context.Post(s => { ((ProgressBar) VisualElement).Value = tank.CurrentVolume; }, null);
         }
+
+        
     }
 }

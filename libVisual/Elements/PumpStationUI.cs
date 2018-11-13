@@ -24,6 +24,7 @@ namespace libVisual.Elements
                 Margin = new Thickness(n * 250, 0, 0, 0),
                 Height = 180
             };
+            Panel.SetZIndex(VisualElement, 0);
             LogicObj = new PumpStation();
             LogicObj.Broken += Station_Broken;
             LogicObj.Fixed += Station_Fixed;

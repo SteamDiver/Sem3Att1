@@ -26,21 +26,5 @@ namespace libVisual.Elements
                     Source = new BitmapImage(new Uri("pack://application:,,,/Resources/carTanker.png"))
                 };
         }
-
-        public void LinkToTanks(List<OilTankUI> tanks)
-        {
-            foreach (var tank in tanks)
-            {
-                tank.LogicObj.IsFull += Tank_IsFull;
-            }
-        }
-
-        private void Tank_IsFull(OilTank sender)
-        {
-            new Task(()=>
-            {
-                LogicObj.DoWork(sender);
-            }).Start();
-        }
     }
 }

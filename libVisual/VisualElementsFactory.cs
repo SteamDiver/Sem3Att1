@@ -41,5 +41,16 @@ namespace libVisual
         {
             return new CarTankerUI(Context);
         }
+
+        public UIElement GetFire(double width = 100, double height = 100)
+        {
+            var image = new Image()
+            {
+                Height = height,
+                Width = width,
+            };
+            AnimationBehavior.SetSourceUri(image, new Uri("pack://application:,,,/Resources/fire.gif"));
+            return image;
+        }
     }
 }

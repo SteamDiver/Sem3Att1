@@ -28,6 +28,7 @@ namespace libVisual.Elements
                     Height = 80,
                     Margin = new Thickness(10, 80, 0, 0)
                 };
+            Panel.SetZIndex(VisualElement, 1);
             AnimationBehavior.SetSourceUri((Image)VisualElement, new Uri("pack://application:,,,/Resources/mechanic_idle.gif"));
         }
 
