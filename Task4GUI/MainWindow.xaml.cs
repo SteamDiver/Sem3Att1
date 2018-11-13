@@ -28,7 +28,6 @@ namespace Task4GUI
         List<PumpStationUI> pumpList = new List<PumpStationUI>();
 
         BufferBlock<MechanicUI> mechanicks = new BufferBlock<MechanicUI>();
-        BufferBlock<PumpStation> brokenStations = new BufferBlock<PumpStation>();
 
         private OilTankUI tank;
         private CarTankerUI car;
@@ -59,38 +58,38 @@ namespace Task4GUI
 
         private void St_Broken(PumpStation sender)
         {
-            brokenStations.Post(sender);
+            ThreadPool.QueueUserWorkItem(FixFactory, sender);
         }
 
-        private static object lockObj = new object();
-        private async void FixFactory()
+        private async void FixFactory(object o)
         {
             while (true)
             {
-                if (brokenStations.Count > 0 && mechanicks.Count > 0)
+                if (pumpList.Count == 0)
+                    return;
+
+               if (mechanicks.Count > 0)
+               {
+                    var st = o as PumpStation;
+                    var station = pumpList.Find(x => x.LogicObj.Equals(st));
+
+                    var m = await mechanicks.ReceiveAsync();
+
+                    if (m != null && station != null)
+                    {
+                        m.MoveTo(station, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
+                        Thread.Sleep(1500);
+                        m.DoWork(station.LogicObj);
+                        mechanicks.Post(m);
+                    }
+
+                    return;
+                }
+                else
                 {
-                    Task t = new Task(TryFix);
-                    t.Start();
+                    Thread.Sleep(1000);
                 }
             }
-        }
-
-        private async void TryFix()
-        {
-
-            var st = await brokenStations.ReceiveAsync();
-            var station = pumpList.Find(x => x.LogicObj.Equals(st));
-
-            var m = await mechanicks.ReceiveAsync();
-
-            if (m != null && station != null)
-            {
-                m.MoveTo(station, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
-                Thread.Sleep(1500);
-                m.DoWork(station.LogicObj);
-                mechanicks.Post(m);
-            }
-
         }
 
         private void AddMechanic_Click(object sender, RoutedEventArgs e)
