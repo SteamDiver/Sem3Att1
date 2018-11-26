@@ -54,8 +54,8 @@ namespace libVisual.Elements
 
         public void Stop()
         {
-            StopAnimation();
             LogicObj.StopWork();
+            StopAnimation();
         }
 
         private void Station_Fixed(PumpStation sender)

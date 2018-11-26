@@ -25,13 +25,11 @@ namespace Task4GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<PumpStationUI> pumpList = new List<PumpStationUI>();
-
-        BufferBlock<MechanicUI> mechanicks = new BufferBlock<MechanicUI>();
-
-        private OilTankUI tank;
-        private CarTankerUI car;
-        private VisualElementsFactory _uiFactory = new VisualElementsFactory(SynchronizationContext.Current);
+        private readonly List<PumpStationUI> _pumpList = new List<PumpStationUI>();
+        private readonly BufferBlock<MechanicUI> _mechanicks = new BufferBlock<MechanicUI>();
+        private OilTankUI _tank;
+        private CarTankerUI _car;
+        private readonly VisualElementsFactory _uiFactory = new VisualElementsFactory(SynchronizationContext.Current);
 
         public MainWindow()
         {
@@ -44,12 +42,12 @@ namespace Task4GUI
 
         private void AddPumpBtn_Click(object sender, RoutedEventArgs e)
         {
-            var pumpStation = _uiFactory.CreatePumpStationUI(pumpList.Count);
-            pumpStation.LinkToTank(tank);
+            var pumpStation = _uiFactory.CreatePumpStationUI(_pumpList.Count);
+            pumpStation.LinkToTank(_tank);
             pumpStation.LogicObj.Broken += St_Broken;
             pumpStation.Start();
             PumpsCanv.Children.Add(pumpStation.VisualElement);
-            pumpList.Add(pumpStation);
+            _pumpList.Add(pumpStation);
 
             MediaPlayer player = new MediaPlayer();
             player.Open(new Uri("pack://application:,,,/Resources/melkie_puzyrki.mp3"));
@@ -65,22 +63,22 @@ namespace Task4GUI
         {
             while (true)
             {
-                if (pumpList.Count == 0)
+                if (_pumpList.Count == 0)
                     return;
 
-                if (mechanicks.Count > 0)
+                if (_mechanicks.Count > 0)
                 {
                     var st = o as PumpStation;
-                    var station = pumpList.Find(x => x.LogicObj.Equals(st));
+                    var station = _pumpList.Find(x => x.LogicObj.Equals(st));
 
-                    var m = await mechanicks.ReceiveAsync();
+                    var m = await _mechanicks.ReceiveAsync();
 
                     if (m != null && station != null)
                     {
                         m.MoveTo(station, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
                         Thread.Sleep(1500);
                         m.DoWork(station.LogicObj);
-                        mechanicks.Post(m);
+                        _mechanicks.Post(m);
                     }
 
                     return;
@@ -95,7 +93,7 @@ namespace Task4GUI
         private void AddMechanic_Click(object sender, RoutedEventArgs e)
         {
             MechanicUI mec = new MechanicUI(SynchronizationContext.Current);
-            mechanicks.Post(mec);
+            _mechanicks.Post(mec);
             PumpsCanv.Children.Add(mec.VisualElement);
         }
 
@@ -103,15 +101,15 @@ namespace Task4GUI
 
         private void InitOilTank()
         {
-            tank = _uiFactory.CreateOilTankUI(TankStatusPb);
-            tank.LogicObj.IsFull += TankObj_IsFull;
-            tank.LogicObj.IsEmpty += LogicObj_IsEmpty;
-            tank.LogicObj.Added += LogicObj_Added;
+            _tank = _uiFactory.CreateOilTankUI(TankStatusPb);
+            _tank.LogicObj.IsFull += TankObj_IsFull;
+            _tank.LogicObj.IsEmpty += LogicObj_IsEmpty;
+            _tank.LogicObj.Added += LogicObj_Added;
         }
 
         private void LogicObj_Added(OilTank sender)
         {
-            var percentage = tank.LogicObj.CurrentVolume / tank.LogicObj.Capacity;
+            var percentage = _tank.LogicObj.CurrentVolume / _tank.LogicObj.Capacity;
             if (percentage >= 50)
             {
                 //tank.LogicObj.Get();
@@ -121,16 +119,16 @@ namespace Task4GUI
 
         private void LogicObj_IsEmpty(OilTank sender)
         {
-            car.MoveTo(new Thickness(-200, 500, 0, 0), new Uri("pack://application:,,,/Resources/carTanker.png"));
+            _car.MoveTo(new Thickness(-200, 500, 0, 0), new Uri("pack://application:,,,/Resources/carTanker.png"));
         }
 
         private void TankObj_IsFull(OilTank sender)
         {
             Dispatcher.Invoke(() =>
             {
-                pumpList.ForEach(p => p.Stop());
+                _pumpList.ForEach(p => p.Stop());
                 var fire = _uiFactory.GetFire(MainCanvas.ActualWidth, MainCanvas.ActualHeight);
-                Canvas.SetZIndex(fire, 2);
+                Panel.SetZIndex(fire, 2);
                 MainCanvas.Children.Add(fire);
 
             });
@@ -138,8 +136,14 @@ namespace Task4GUI
 
         private void InitCarTank()
         {
-            car = _uiFactory.CreateCarTankUI();
-            MainCanvas.Children.Add(car.VisualElement);
+            _car = _uiFactory.CreateCarTankUI();
+            MainCanvas.Children.Add(_car.VisualElement);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //stop each pump
+            _pumpList.ForEach(p=>p.Stop());
         }
     }
 }
