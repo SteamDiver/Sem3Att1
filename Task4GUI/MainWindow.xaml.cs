@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using libTask4;
+using libTask4.Interfaces;
 using libVisual;
 using libVisual.Elements;
 using XamlAnimatedGif;
@@ -45,6 +46,7 @@ namespace Task4GUI
             var pumpStation = _uiFactory.CreatePumpStationUI(_pumpList.Count);
             pumpStation.LinkToTank(_tank);
             pumpStation.LogicObj.Broken += St_Broken;
+            pumpStation.LogicObj.Dead += St_Dead;
             pumpStation.Start();
             PumpsCanv.Children.Add(pumpStation.VisualElement);
             _pumpList.Add(pumpStation);
@@ -52,6 +54,21 @@ namespace Task4GUI
             MediaPlayer player = new MediaPlayer();
             player.Open(new Uri("pack://application:,,,/Resources/melkie_puzyrki.mp3"));
             player.Play();
+        }
+
+        private void St_Dead(PumpStation sender)
+        {
+            var ui = _pumpList.Find(x => x.LogicObj.Equals(sender));
+            if (ui != null)
+            {
+                _pumpList.Remove(ui);
+                Dispatcher.Invoke(() =>
+                {
+                    PumpsCanv.Children.Remove(ui.VisualElement);
+                    PumpsCanv.Children.Add(_uiFactory.GetExplosion(((Image)ui.VisualElement).Margin));
+                });
+            }
+
         }
 
         private void St_Broken(PumpStation sender)
@@ -77,16 +94,16 @@ namespace Task4GUI
                     {
                         m.MoveTo(station, new Uri("pack://application:,,,/Resources/mechanic_run.gif"));
                         Thread.Sleep(1500);
-                        m.DoWork(station.LogicObj);
-                        _mechanicks.Post(m);
+                        
+                        //если еще не рвануло
+                        if (_pumpList.Contains(station)){
+                            m.DoWork(station.LogicObj);
+                        } 
                     }
-
+                    _mechanicks.Post(m);
                     return;
                 }
-                else
-                {
-                    Thread.Sleep(1000);
-                }
+                Thread.Sleep(1000);
             }
         }
 
@@ -96,8 +113,6 @@ namespace Task4GUI
             _mechanicks.Post(mec);
             PumpsCanv.Children.Add(mec.VisualElement);
         }
-
-
 
         private void InitOilTank()
         {
@@ -109,11 +124,16 @@ namespace Task4GUI
 
         private void LogicObj_Added(OilTank sender)
         {
-            var percentage = _tank.LogicObj.CurrentVolume / _tank.LogicObj.Capacity;
-            if (percentage >= 50)
+            var percentage = _tank.LogicObj.CurrentVolume / _tank.LogicObj.Capacity * 100;
+            if (percentage == 50)
             {
-                //tank.LogicObj.Get();
-                //car.MoveTo(new Thickness(600, 500, 0, 0), new Uri("pack://application:,,,/Resources/carTanker.png"));
+                new Thread(() =>
+                {
+                    _car.MoveTo(new Thickness(600, 500, 0, 0),
+                        new Uri("pack://application:,,,/Resources/carTanker.png"));
+                    Thread.Sleep(3000);
+                    _tank.LogicObj.Get();
+                }).Start();
             }
         }
 
@@ -143,7 +163,7 @@ namespace Task4GUI
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             //stop each pump
-            _pumpList.ForEach(p=>p.Stop());
+            _pumpList.ForEach(p => p.Stop());
         }
     }
 }

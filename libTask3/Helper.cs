@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace libTask3
 {
-    public class Helper
+    public static class Helper
     {
         public static IMovie GetRandom()
         {

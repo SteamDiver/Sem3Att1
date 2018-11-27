@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using libTask4;
 using libVisual.Elements;
 using XamlAnimatedGif;
@@ -50,6 +51,18 @@ namespace libVisual
                 Width = width,
             };
             AnimationBehavior.SetSourceUri(image, new Uri("pack://application:,,,/Resources/fire.gif"));
+            return image;
+        }
+
+        public UIElement GetExplosion(Thickness position)
+        {
+            var image = new Image()
+            {
+                Margin = position,
+                Height = 180
+            };
+            AnimationBehavior.SetSourceUri(image, new Uri("pack://application:,,,/Resources/explosion.gif"));
+            AnimationBehavior.SetRepeatBehavior(image, new RepeatBehavior(1));
             return image;
         }
     }
