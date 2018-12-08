@@ -7,26 +7,33 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="160*"/>
+            <ColumnDefinition Width="160*"/>
+            <ColumnDefinition Width="160*"/>
+            <ColumnDefinition Width="313*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="60*"/>
             <RowDefinition Height="197*"/>
             <RowDefinition Height="163*"/>
         </Grid.RowDefinitions>
-        <Button Content="..." HorizontalAlignment="Left" Margin="433,10,0,0" VerticalAlignment="Top" Width="32" Height="23" Click="Button_Click"/>
-        <TextBox Grid.Row="0" x:Name="FileTb" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="418"/>
-        <GroupBox Header="Classes" HorizontalAlignment="Left" Height="167" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Grid.Row="1">
+        <Button Content="..." HorizontalAlignment="Right" Margin="0,10,12,0" VerticalAlignment="Top" Width="32" Height="23" Click="Button_Click" Grid.Column="2"/>
+        <TextBox Grid.Row="0" x:Name="FileTb" Height="23" Margin="10,10,52,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Grid.ColumnSpan="3"
+                 Grid.Column="0" />
+        <GroupBox Header="Classes" Height="167" Margin="10,10,10,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0">
             <ListBox x:Name="ClassesLstB"  Margin="0,10,-2.4,6" SelectionChanged="ClassesLstB_SelectionChanged"/>
         </GroupBox>
-        <GroupBox Header="Methods" HorizontalAlignment="Left" Height="167" Margin="165,10,0,0" VerticalAlignment="Top" Width="150" Grid.Row="1">
-            <ListBox x:Name="MethodsLstB"  Margin="0,10,-2.4,6"/>
+        <GroupBox Header="Methods" Height="167" Margin="10,10,10,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1">
+            <ListBox x:Name="MethodsLstB"  Margin="0,10,-2.4,6" MouseDoubleClick="MethodsLstB_OnMouseDoubleClick"/>
         </GroupBox>
-        <GroupBox Header="Properties" HorizontalAlignment="Left" Height="167" Margin="320,10,0,0" VerticalAlignment="Top" Width="150" Grid.Row="1">
-            <ListBox x:Name="PropertiesLstB"  Margin="0,10,-2.4,6"/>
+        <GroupBox Header="Properties" Height="167" Margin="10,10,10,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="2">
+            <ListBox x:Name="PropertiesLstB"  Margin="0,10,-2.4,6" MouseDoubleClick="PropertiesLstB_OnMouseDoubleClick"/>
         </GroupBox>
-        <DataGrid x:Name="DataGrid" Margin="10,10.2,9.6,10" Grid.Row="2" ItemsSource="{Binding Path=Objects}">
+        <DataGrid x:Name="DataGrid" Margin="10,10.2,9.6,10" Grid.Row="2" ItemsSource="{Binding Path=Objects}" Grid.ColumnSpan="4">
         </DataGrid>
-            <Button Grid.Row="0" x:Name="CreateBtn" Content="Create object" Height="32" Margin="0,12,9.6,0" VerticalAlignment="Top" Click="CreateBtn_Click" HorizontalAlignment="Right" Width="105"/>
-        <GroupBox Header="Constructors" Height="167" Margin="470,10,9.6,0" VerticalAlignment="Top" Grid.Row="1">
+        <Button Grid.Row="0" x:Name="CreateBtn" Content="Create object" Height="23" Margin="0,10,9.6,0" VerticalAlignment="Top" Click="CreateBtn_Click" HorizontalAlignment="Right" Width="105" Grid.Column="3"/>
+        <GroupBox Header="Constructors" Height="167" Margin="10,10,9.6,0" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3">
             <ListBox x:Name="ConstructorsLstB"  Margin="0,10,-2.4,6"/>
         </GroupBox>
 

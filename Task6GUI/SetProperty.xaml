@@ -1,0 +1,17 @@
+﻿<Window x:Class="Task6GUI.SetProperty"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task6GUI"
+        mc:Ignorable="d"
+        Title="SetProperty" Height="128.306" Width="465.289">
+    <Grid>
+        <Label Content="Текущее значение" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Установить значение" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="CurValueLbl" HorizontalAlignment="Left" Margin="212,10,0,0" VerticalAlignment="Top" Height="26" Width="170"/>
+        <TextBox x:Name="NewValeTb" HorizontalAlignment="Left" Height="23" Margin="212,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="139"/>
+        <Button x:Name="SetValueBtn" Content="Set" HorizontalAlignment="Left" Margin="356,45,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="SetValueBtn_Click"/>
+
+    </Grid>
+</Window>

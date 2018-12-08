@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -68,8 +69,8 @@ namespace Task6GUI
                 ClearListBoxes();
                 var type = _helper.Types.Find(t => t.Name == ClassesLstB.SelectedValue.ToString());
                 _typeInfo = new TypeHelper(type);
-                PropertiesLstB.ItemsSource = _typeInfo.Properties.Select(p => p.Name);
-                MethodsLstB.ItemsSource = _typeInfo.Methods.Select(x => x.Name);
+                PropertiesLstB.ItemsSource = _typeInfo.Properties;
+                MethodsLstB.ItemsSource = _typeInfo.Methods.Where(m => m.IsSpecialName == false);
                 ConstructorsLstB.ItemsSource = _typeInfo.Constructors.Select(TypeHelper.ConstructorInfoToString);
             }
         }
@@ -93,6 +94,42 @@ namespace Task6GUI
             else
             {
                 MessageBox.Show("You can not create object of this type");
+            }
+        }
+
+        private void MethodsLstB_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var obj = DataGrid.SelectedItem;
+            if (obj != null)
+            {
+                var method = (MethodInfo)MethodsLstB.SelectedItem;
+                object[] param = null;
+
+                //if (method.GetParameters().Length > 0)
+                //{
+                //    var invokerWindow = new Invoker(method);
+                //}
+
+                if (method.ReturnType == typeof(void))
+                {
+                    method.Invoke(obj, param);
+                }
+                else
+                {
+                    MessageBox.Show(method.Invoke(obj, param).ToString());
+                }
+            }
+        }
+
+        private void PropertiesLstB_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var obj = DataGrid.SelectedItem;
+            if (obj != null)
+            {
+                var property = (PropertyInfo)PropertiesLstB.SelectedItem;
+                var propWindow = new SetProperty(property, obj);
+                propWindow.ShowDialog();
+                DataGrid.Items.Refresh();
             }
         }
     }
