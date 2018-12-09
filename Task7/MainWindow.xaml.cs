@@ -22,6 +22,7 @@ using DataController;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
+using Representations;
 
 namespace Task7
 {
@@ -30,25 +31,18 @@ namespace Task7
     /// </summary>
     public partial class MainWindow : Window
     {
-        public SeriesCollection LastHourSeries { get; set; }
+        public RepresentController RepresentController { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            LastHourSeries = new SeriesCollection
-            {
-                new LineSeries
-                {
-                    AreaLimit = -10,
-                    Values = new ChartValues<ObservableValue>()
-                }
-            };
-
             IncomingDataController controller =
                 new IncomingDataController(new ExcelDataProvider(new FileInfo(@"Sources\prices.xlsx")));
             controller.StartReceive(1000);
             controller.DataReceived += Controller_DataReceived;
+
+            RepresentController = new RoCController(20);
             DataContext = this;
         }
 
@@ -100,30 +94,16 @@ namespace Task7
             set => Dispatcher.Invoke(() => SetValue(LowProperty, value));
         }
 
-        private decimal _lastValue;
-
         private void Controller_DataReceived(Data.Interfaces.ICandle data)
         {
             if (data != null)
             {
-                var values = LastHourSeries[0].Values;
-                OpenValue = ((Candle) data).Open;
-                CloseValue = ((Candle) data).Close;
-                HighValue = ((Candle) data).High;
-                LowValue = ((Candle) data).Low;
-
-                LastTime = ((Candle) data).Time.ToString(CultureInfo.InvariantCulture);
-
-                if (_lastValue != 0m)
-                {
-                    var value = (CloseValue / _lastValue - 1) * 100;
-                    ChartColor = value < 0 ? Brushes.IndianRed : Brushes.LightGreen;
-                    values.Add(new ObservableValue((double) value));
-                }
-
-                _lastValue = CloseValue;
-                if (values?.Count == 20)
-                    values.RemoveAt(0);
+                OpenValue = data.Open;
+                CloseValue = data.Close;
+                HighValue = data.High;
+                LowValue = data.Low;
+                LastTime = data.Time.ToString();
+                RepresentController.AddValueToLine(data, (x) => x.Open);
             }
         }
 

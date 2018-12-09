@@ -115,6 +115,10 @@
       <Project>{F082B674-5A3D-46FD-AE13-B966BB7C64EF}</Project>
       <Name>Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Representations\Representations.csproj">
+      <Project>{E31BAC23-2F96-4E5C-A104-079073AE45CC}</Project>
+      <Name>Representations</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
