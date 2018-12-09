@@ -17,8 +17,5 @@ namespace Providers.Tests.Interfaces
 
         [TestMethod]
         void GetDataNotSameTest();
-
-        [TestMethod]
-        void TimerTest();
     }
 }

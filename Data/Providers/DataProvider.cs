@@ -11,10 +11,6 @@ namespace Data.Providers
 {
     public abstract class DataProvider : IDataProvider
     {
-        public delegate void DataProviderEventHandler(ICandle data);
-        public event DataProviderEventHandler DataReceived;
-
         public abstract ICandle GetData();
-        internal void OnDataReceived(ICandle data) => DataReceived?.Invoke(data);
     }
 }
