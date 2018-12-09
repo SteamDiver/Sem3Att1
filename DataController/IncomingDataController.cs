@@ -8,14 +8,14 @@ using Data.Interfaces;
 
 namespace DataController
 {
-    public class DataController
+    public class IncomingDataController
     {
         public delegate void DataEventHandler(ICandle data);
         public event DataEventHandler DataReceived;
         private readonly IDataProvider _dataProvider;
         private Timer _t;
 
-        public DataController(IDataProvider dataProvider)
+        public IncomingDataController(IDataProvider dataProvider)
         {
             _dataProvider = dataProvider;
         }

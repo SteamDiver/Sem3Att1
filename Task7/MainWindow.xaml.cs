@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Data.Candles;
 using Data.Providers;
+using DataController;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
@@ -27,7 +29,9 @@ namespace Task7
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    { 
+    {
+        public SeriesCollection LastHourSeries { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,20 +41,67 @@ namespace Task7
                 new LineSeries
                 {
                     AreaLimit = -10,
-                    Values = new ChartValues<ObservableValue>
-                    {
-                        
-                    }
+                    Values = new ChartValues<ObservableValue>()
                 }
             };
 
-            DataController.DataController controller = new DataController.DataController(new ExcelDataProvider(new FileInfo(@"Sources\prices.xlsx")));
+            IncomingDataController controller =
+                new IncomingDataController(new ExcelDataProvider(new FileInfo(@"Sources\prices.xlsx")));
             controller.StartReceive(1000);
             controller.DataReceived += Controller_DataReceived;
             DataContext = this;
         }
 
-        private decimal lastValue;
+        public static readonly DependencyProperty ChartColorProperty =
+            DependencyProperty.Register("ChartColor", typeof(Brush), typeof(MainWindow));
+
+        public static readonly DependencyProperty LastTimeProperty =
+            DependencyProperty.Register("LastTime", typeof(string), typeof(MainWindow));
+
+        public static readonly DependencyProperty OpenProperty =
+            DependencyProperty.Register("OpenValue", typeof(decimal), typeof(MainWindow));
+
+        public static readonly DependencyProperty CloseProperty =
+            DependencyProperty.Register("CloseValue", typeof(decimal), typeof(MainWindow));
+
+        public static readonly DependencyProperty HighProperty =
+            DependencyProperty.Register("HighValue", typeof(decimal), typeof(MainWindow));
+
+        public static readonly DependencyProperty LowProperty =
+            DependencyProperty.Register("LowValue", typeof(decimal), typeof(MainWindow));
+
+        public Brush ChartColor
+        {
+            get => Dispatcher.Invoke(() => (Brush) GetValue(OpenProperty));
+            set => Dispatcher.Invoke(() => SetValue(ChartColorProperty, value));
+        }
+
+        public decimal OpenValue
+        {
+            get => Dispatcher.Invoke(() => (decimal) GetValue(OpenProperty));
+            set => Dispatcher.Invoke(() => SetValue(OpenProperty, value));
+        }
+
+        public decimal CloseValue
+        {
+            get => Dispatcher.Invoke(() => (decimal) GetValue(CloseProperty));
+            set => Dispatcher.Invoke(() => SetValue(CloseProperty, value));
+        }
+
+        public decimal HighValue
+        {
+            get => Dispatcher.Invoke(() => (decimal) GetValue(HighProperty));
+            set => Dispatcher.Invoke(() => SetValue(HighProperty, value));
+        }
+
+        public decimal LowValue
+        {
+            get => Dispatcher.Invoke(() => (decimal) GetValue(LowProperty));
+            set => Dispatcher.Invoke(() => SetValue(LowProperty, value));
+        }
+
+        private decimal _lastValue;
+
         private void Controller_DataReceived(Data.Interfaces.ICandle data)
         {
             if (data != null)
@@ -61,66 +112,25 @@ namespace Task7
                 HighValue = ((Candle) data).High;
                 LowValue = ((Candle) data).Low;
 
-                LastTime = ((Candle) data).Time.ToString();
+                LastTime = ((Candle) data).Time.ToString(CultureInfo.InvariantCulture);
 
-                if (lastValue != 0m)
+                if (_lastValue != 0m)
                 {
-                    var value = (OpenValue / lastValue - 1) * 100;
+                    var value = (CloseValue / _lastValue - 1) * 100;
                     ChartColor = value < 0 ? Brushes.IndianRed : Brushes.LightGreen;
                     values.Add(new ObservableValue((double) value));
                 }
 
-                lastValue = OpenValue;
-                if (values.Count == 20)
+                _lastValue = CloseValue;
+                if (values?.Count == 20)
                     values.RemoveAt(0);
             }
         }
 
-        public SeriesCollection LastHourSeries { get; set; }
-
-        public string LastTime {
-            get => Dispatcher.Invoke(() => (string)GetValue(LastTimeProperty));
+        public string LastTime
+        {
+            get => Dispatcher.Invoke(() => (string) GetValue(LastTimeProperty));
             set => Dispatcher.Invoke(() => this.SetValue(LastTimeProperty, value));
-        }
-
-        public static readonly DependencyProperty ChartColorProperty =
-            DependencyProperty.Register("ChartColor", typeof(Brush), typeof(MainWindow));
-        public static readonly DependencyProperty LastTimeProperty =
-            DependencyProperty.Register("LastTime", typeof(string), typeof(MainWindow));
-        public static readonly DependencyProperty OpenProperty =
-            DependencyProperty.Register("OpenValue", typeof(decimal), typeof(MainWindow));
-        public static readonly DependencyProperty CloseProperty =
-            DependencyProperty.Register("CloseValue", typeof(decimal), typeof(MainWindow));
-        public static readonly DependencyProperty HighProperty =
-            DependencyProperty.Register("HighValue", typeof(decimal), typeof(MainWindow));
-        public static readonly DependencyProperty LowProperty =
-            DependencyProperty.Register("LowValue", typeof(decimal), typeof(MainWindow));
-
-        public Brush ChartColor
-        {
-            get => Dispatcher.Invoke(() => (Brush)GetValue(OpenProperty));
-            set => Dispatcher.Invoke(() => this.SetValue(ChartColorProperty, value));
-        }
-
-        public decimal OpenValue
-        {
-            get => Dispatcher.Invoke(() => (decimal)GetValue(OpenProperty));
-            set => Dispatcher.Invoke(() => this.SetValue(OpenProperty, value));
-        }
-        public decimal CloseValue
-        {
-            get => Dispatcher.Invoke(() => (decimal)GetValue(CloseProperty));
-            set => Dispatcher.Invoke(() => this.SetValue(CloseProperty, value));
-        }
-        public decimal HighValue
-        {
-            get => Dispatcher.Invoke(() => (decimal)GetValue(HighProperty));
-            set => Dispatcher.Invoke(() => this.SetValue(HighProperty, value));
-        }
-        public decimal LowValue
-        {
-            get => Dispatcher.Invoke(() => (decimal)GetValue(LowProperty));
-            set => Dispatcher.Invoke(() => this.SetValue(LowProperty, value));
         }
     }
 }

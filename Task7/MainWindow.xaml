@@ -56,9 +56,23 @@
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <!--<Style TargetType="Label">
+                        <Setter Property="BorderThickness" Value="2"></Setter>
+                        <Setter Property="BorderBrush" Value="#303030"></Setter>
+                        <Setter Property="Width" Value="64"></Setter>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Orange" />
+                                <Setter Property="BorderBrush" Value="Orange" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>-->
+                </Grid.Resources>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                    <Label Opacity=".4" FontSize="18" Margin="16,32,16,0" HorizontalAlignment="Center">Open</Label>
-                    <TextBlock Foreground="#303030" FontSize="40" Text="{Binding Path=OpenValue, StringFormat={}{0:N5}}" />
+                    <Label Opacity=".4" FontSize="18" Margin="16,32,16,0" HorizontalAlignment="Center" Content="Open" />
+                        <TextBlock Foreground="#303030" FontSize="40" Text="{Binding Path=OpenValue, StringFormat={}{0:N5}}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
                     <Label Opacity=".4" FontSize="18" Margin="16,32,16,0" HorizontalAlignment="Center">Close</Label>
