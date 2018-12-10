@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Representations
 {
-    public abstract class RepresentController : INotifyPropertyChanged
+    public abstract class RepresentController
     {
         public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection
             {
@@ -28,13 +28,6 @@ namespace Representations
         public int MaxPointsCount { get; set; }
 
         public RepresentController(int maxCount) { MaxPointsCount = maxCount; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
 
         public abstract void AddValueToLine(ICandle candle, Func<ICandle, decimal> func);
     }

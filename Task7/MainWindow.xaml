@@ -39,7 +39,7 @@
                 <RowDefinition Height=".5*"></RowDefinition>
             </Grid.RowDefinitions>
             <Border x:Name="Border1" Grid.Row="0" Grid.RowSpan="4" CornerRadius="5" Background="White" />
-            <Border Grid.Row="0" Grid.RowSpan="3" Background="Orange" ></Border>
+            <Border Grid.Row="0" Grid.RowSpan="3" Background="CornflowerBlue" ></Border>
             <TextBlock Grid.Row="0" TextAlignment="Center" Padding="10, 10, 0, 5" Foreground="White" FontSize="18">
                     RoC
             </TextBlock>

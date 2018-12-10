@@ -28,7 +28,6 @@ namespace Representations
                 lineValues.RemoveAt(0);
             }
             LastCandle = candle;
-            OnPropertyChanged("SeriesCollection");
         }
     }
 }
