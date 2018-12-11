@@ -7,7 +7,7 @@
         xmlns:base="clr-namespace:LiveCharts.Wpf.Charts.Base;assembly=LiveCharts.Wpf"
         xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="458.368" Width="836.26" ResizeMode="NoResize" WindowStyle="ThreeDBorderWindow">
+        Title="MainWindow" Height="599.168" Width="836.26" ResizeMode="NoResize" WindowStyle="ThreeDBorderWindow">
     <Grid>
         <Grid>
             <Grid.Effect>
@@ -35,44 +35,36 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height=".50*"></RowDefinition>
-                <RowDefinition Height=".5*"></RowDefinition>
+                <RowDefinition Height="87*"></RowDefinition>
+                <RowDefinition Height="87*"/>
+                <RowDefinition Height="73*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Border x:Name="Border1" Grid.Row="0" Grid.RowSpan="4" CornerRadius="5" Background="White" />
-            <Border Grid.Row="0" Grid.RowSpan="3" Background="CornflowerBlue" ></Border>
-            <TextBlock Grid.Row="0" TextAlignment="Center" Padding="10, 10, 0, 5" Foreground="White" FontSize="18">
+            <Border x:Name="Border1" Grid.Row="0" Grid.RowSpan="5" CornerRadius="5" Background="White" Margin="0,0,-0.4,-0.4" />
+            <Border Grid.Row="0" Grid.RowSpan="4" Background="CornflowerBlue" Margin="0,0,-0.4,1" ></Border>
+            <TextBlock Grid.Row="0" TextAlignment="Center" Padding="10, 10, 0, 5" Foreground="White" FontSize="18" Margin="0,0,-0.4,0.6">
                     RoC
             </TextBlock>
-            <TextBlock Grid.Row="1" TextAlignment="Center" Foreground="#99FFFFFF" Padding="0,0,0,20" Text="{Binding Path=LastTime}"/>
-            <wpf:CartesianChart Grid.Row="2" Margin="0,0,0,0" Series="{Binding RepresentController.SeriesCollection}" Hoverable="False" DataTooltip="{x:Null}" Grid.RowSpan="1">
+            <TextBlock TextAlignment="Center" Foreground="#99FFFFFF" Padding="0,0,0,20" Text="{Binding Path=LastTime}" Margin="0,39,-0.4,0.2" Grid.RowSpan="2"/>
+            <wpf:CartesianChart Grid.Row="2" Margin="0,17.8,-0.4,0.6" Series="{Binding CandleRepresentController.SeriesCollection}" Hoverable="False" DataTooltip="{x:Null}">
                 <wpf:CartesianChart.AxisX>
                     <wpf:Axis ShowLabels="False" MinValue="2"></wpf:Axis>
                 </wpf:CartesianChart.AxisX>
             </wpf:CartesianChart>
-            <Grid Grid.Row="3">
+            <wpf:CartesianChart Grid.Row="3" Margin="0,20.4,-0.4,1" Series="{Binding RoCRepresentController.SeriesCollection}" Hoverable="False" DataTooltip="{x:Null}" Grid.RowSpan="1">
+                <wpf:CartesianChart.AxisX>
+                    <wpf:Axis ShowLabels="False" MinValue="2"></wpf:Axis>
+                </wpf:CartesianChart.AxisX>
+            </wpf:CartesianChart>
+            <Grid Grid.Row="4" Margin="0,5,-0.4,-0.4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Grid.Resources>
-                    <!--<Style TargetType="Label">
-                        <Setter Property="BorderThickness" Value="2"></Setter>
-                        <Setter Property="BorderBrush" Value="#303030"></Setter>
-                        <Setter Property="Width" Value="64"></Setter>
-                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="Orange" />
-                                <Setter Property="BorderBrush" Value="Orange" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>-->
-                </Grid.Resources>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                     <Label Opacity=".4" FontSize="18" Margin="16,32,16,0" HorizontalAlignment="Center" Content="Open" />
-                        <TextBlock Foreground="#303030" FontSize="40" Text="{Binding Path=OpenValue, StringFormat={}{0:N5}}" />
+                    <TextBlock Foreground="#303030" FontSize="40" Text="{Binding Path=OpenValue, StringFormat={}{0:N5}}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
                     <Label Opacity=".4" FontSize="18" Margin="16,32,16,0" HorizontalAlignment="Center">Close</Label>

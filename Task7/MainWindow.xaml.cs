@@ -31,7 +31,8 @@ namespace Task7
     /// </summary>
     public partial class MainWindow : Window
     {
-        public RepresentController RepresentController { get; set; }
+        public RepresentController RoCRepresentController { get; set; }
+        public RepresentController CandleRepresentController { get; set; }
 
         public MainWindow()
         {
@@ -42,7 +43,8 @@ namespace Task7
             controller.StartReceive(1000);
             controller.DataReceived += Controller_DataReceived;
 
-            RepresentController = new RoCController(20);
+            RoCRepresentController = new RoCController(20);
+            CandleRepresentController = new CandleRepresentController(20);
             DataContext = this;
         }
 
@@ -103,7 +105,8 @@ namespace Task7
                 HighValue = data.High;
                 LowValue = data.Low;
                 LastTime = data.Time.ToString();
-                RepresentController.AddValueToLine(data, (x) => x.Open);
+                RoCRepresentController.AddValueToLine(data, (x) => x.Close);
+                CandleRepresentController.AddValueToLine(data, (x)=>x.Close);
             }
         }
 

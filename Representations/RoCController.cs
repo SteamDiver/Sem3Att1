@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Data.Candles;
 using Data.Interfaces;
+using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 
@@ -15,6 +16,13 @@ namespace Representations
     {
         public RoCController(int maxCount) : base(maxCount)
         {
+            SeriesCollection = new SeriesCollection{
+                new LineSeries
+                {
+                    AreaLimit = -10,
+                    Values = new ChartValues<ObservableValue>(),
+                }
+            };
         }
 
         public override void AddValueToLine(ICandle candle, Func<ICandle, decimal> func)

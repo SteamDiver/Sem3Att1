@@ -15,14 +15,7 @@ namespace Representations
 {
     public abstract class RepresentController
     {
-        public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection
-            {
-                new LineSeries
-                {
-                    AreaLimit = -10,
-                    Values = new ChartValues<ObservableValue>(),
-                }
-            };
+        public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
 
         public ICandle LastCandle { get; protected set; }
         public int MaxPointsCount { get; set; }
